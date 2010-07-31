@@ -2,16 +2,14 @@ package ail;
 
 public class Column {
 	public String name;
-	public boolean hasWidth;
-	public int preferredWidth;
+	public SizeParameter preferred, minimum, maximum;
 	public boolean editable;
 	
 	public Column(String newName) {
 		name = newName;
-	}
-	
-	public void setWidth(int newWidth) {
-		hasWidth = true;
-		preferredWidth = newWidth;
+		
+		preferred = new SizeParameter();
+		minimum = new SizeParameter();
+		maximum = new SizeParameter();
 	}
 }

@@ -20,10 +20,12 @@ public class Table implements TableModelListener {
 	private Runnable selectionHandler, valueChangeHandler;
 	private Object[] extendedData;
 	
-	public Table(Column... columns) {
+	public Table(Column... newColumns) {
 		extendedData = new Object[0];
 		selectionHandler = null;
 		valueChangeHandler = null;
+		columns = newColumns;
+		
 		tableModel = new TableModel();
 		table = new JTable(tableModel);
 		table.setFillsViewportHeight(true);
@@ -36,15 +38,20 @@ public class Table implements TableModelListener {
 		table.setSelectionModel(selectionModel);
 		
 		scrollPane = new JScrollPane(table);
+		
+		setColumnWidths();
 	}
 	
 	private void setColumnWidths() {
 		int offset = 0;
 		for(Column column : columns) {
-			if(column.hasWidth) {
-				TableColumn tableColumn = table.getColumnModel().getColumn(offset);
-				tableColumn.setPreferredWidth(column.preferredWidth);
-			}
+			TableColumn tableColumn = table.getColumnModel().getColumn(offset);
+			if(column.preferred.isSet)
+				tableColumn.setPreferredWidth(column.preferred.size);
+			if(column.minimum.isSet)
+				tableColumn.setMinWidth(column.minimum.size);
+			if(column.maximum.isSet)
+				tableColumn.setMaxWidth(column.maximum.size);
 			offset++;
 		}
 	}
@@ -85,19 +92,19 @@ public class Table implements TableModelListener {
 		valueChangeHandler = newValueChangeHandler;
 	}
 	
-	public void setColumnWidth(int columnIndex, int width) {
+	public void setPreferredColumnWidth(int columnIndex, int width) {
 		TableColumnModel columnModel = table.getColumnModel();
 		TableColumn column = columnModel.getColumn(columnIndex);
 		column.setPreferredWidth(width);
 	}
 	
-	public void setMinColumnWidth(int columnIndex, int width) {
+	public void setMinimumColumnWidth(int columnIndex, int width) {
 		TableColumnModel columnModel = table.getColumnModel();
 		TableColumn column = columnModel.getColumn(columnIndex);
 		column.setMinWidth(width);
 	}
 	
-	public void setMaxColumnWidth(int columnIndex, int width) {
+	public void setMaximumColumnWidth(int columnIndex, int width) {
 		TableColumnModel columnModel = table.getColumnModel();
 		TableColumn column = columnModel.getColumn(columnIndex);
 		column.setMaxWidth(width);
