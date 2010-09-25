@@ -10,6 +10,9 @@ public class DefaultCellRenderer extends DefaultTableCellRenderer {
 			String dateString = Time.getDateString((Date)value);
 			setText(dateString);
 		}
+		else if(value instanceof Icon) {
+			setIcon(((Icon)value).icon);
+		}
 		else
 			super.setValue(value);
 	}
