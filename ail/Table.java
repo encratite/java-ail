@@ -39,10 +39,10 @@ public class Table implements TableModelListener {
 		
 		scrollPane = new JScrollPane(table);
 		
-		setColumnWidths();
+		initialiseColumns();
 	}
 	
-	private void setColumnWidths() {
+	private void initialiseColumns() {
 		int offset = 0;
 		for(Column column : columns) {
 			TableColumn tableColumn = table.getColumnModel().getColumn(offset);
@@ -52,6 +52,7 @@ public class Table implements TableModelListener {
 				tableColumn.setMinWidth(column.minimum.size);
 			if(column.maximum.isSet)
 				tableColumn.setMaxWidth(column.maximum.size);
+			tableColumn.setCellRenderer(column.renderer);
 			offset++;
 		}
 	}
