@@ -22,4 +22,10 @@ public class Time {
 		format.format(input, buffer, new FieldPosition(0));
 		return buffer.toString();
 	}
+	
+	public static Date convertTimestamp(long input) {
+		Date output = new Date();
+		output.setTime(input * 1000);
+		return output;
+	}
 }
