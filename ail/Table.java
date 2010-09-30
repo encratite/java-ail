@@ -53,6 +53,18 @@ public class Table implements TableModelListener {
 			if(column.maximum.isSet)
 				tableColumn.setMaxWidth(column.maximum.size);
 			tableColumn.setCellRenderer(column.renderer);
+			
+			int toggleCount = 0;
+			switch(column.sortingType) {
+			case ascending:
+				toggleCount = 1;
+				break;
+			case descending:
+				toggleCount = 2;
+				break;
+			}
+			for(int i = 0; i < toggleCount; i++)
+				table.getRowSorter().toggleSortOrder(offset); 
 			offset++;
 		}
 	}
@@ -93,22 +105,22 @@ public class Table implements TableModelListener {
 		valueChangeHandler = newValueChangeHandler;
 	}
 	
-	public void setPreferredColumnWidth(int columnIndex, int width) {
+	private TableColumn getColumnObject(int columnIndex) {
 		TableColumnModel columnModel = table.getColumnModel();
 		TableColumn column = columnModel.getColumn(columnIndex);
-		column.setPreferredWidth(width);
+		return column;
+	}
+	
+	public void setPreferredColumnWidth(int columnIndex, int width) {
+		getColumnObject(columnIndex).setPreferredWidth(width);
 	}
 	
 	public void setMinimumColumnWidth(int columnIndex, int width) {
-		TableColumnModel columnModel = table.getColumnModel();
-		TableColumn column = columnModel.getColumn(columnIndex);
-		column.setMinWidth(width);
+		getColumnObject(columnIndex).setMinWidth(width);
 	}
 	
 	public void setMaximumColumnWidth(int columnIndex, int width) {
-		TableColumnModel columnModel = table.getColumnModel();
-		TableColumn column = columnModel.getColumn(columnIndex);
-		column.setMaxWidth(width);
+		getColumnObject(columnIndex).setMaxWidth(width);
 	}
 	
 	public synchronized void addRow(Object[] row) {
@@ -231,7 +243,7 @@ public class Table implements TableModelListener {
 		}
 		
 		public Class<?> getColumnClass(int column) {
-			return getValueAt(0, column).getClass();
+			return columns[column].type;
 		}
 		
 		public void setValueAt(Object value, int row, int column) {
