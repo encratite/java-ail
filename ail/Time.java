@@ -28,4 +28,8 @@ public class Time {
 		output.setTime(input * 1000);
 		return output;
 	}
+	
+	public static String getCurrentDateString() {
+		return getDateString(new Date());
+	}
 }
